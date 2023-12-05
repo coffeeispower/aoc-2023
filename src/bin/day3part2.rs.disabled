@@ -1,0 +1,61 @@
+#[derive(Debug, Clone, Copy)]
+enum Point {
+    Number {
+        digit: u8,
+        number: usize,
+        start_position: usize,
+    },
+    Symbol,
+    Dot,
+}
+fn main() {
+    let map_string = include_str!("ex3.txt");
+    let map = map_string
+        .lines()
+        .map(|line| {
+            let mut point_row = Vec::new();
+            let mut number_buf = String::new();
+            for current in line.chars() {
+                match current {
+                    '.' => {
+                        let number_start_index = point_row.len();
+                        if !number_buf.is_empty() {
+                            let number = number_buf.parse::<usize>().unwrap();
+                            point_row.extend(number_buf.chars().map(|digit| Point::Number {
+                                number,
+                                digit: digit.to_digit(10).unwrap() as u8,
+                                start_position: number_start_index,
+                            }));
+                            number_buf.clear();
+                        }
+                        point_row.push(Point::Dot);
+                    }
+                    digit if digit.is_ascii_digit() => {
+                        number_buf.push(digit);
+                    }
+                    _ => {
+                        let number_start_index = point_row.len();
+                        if !number_buf.is_empty() {
+                            let number = number_buf.parse::<usize>().unwrap();
+                            point_row.extend(number_buf.chars().map(|digit| Point::Number {
+                                number,
+                                digit: digit.to_digit(10).unwrap() as u8,
+                                start_position: number_start_index,
+                            }));
+                            number_buf.clear();
+                        }
+                        point_row.push(Point::Symbol);
+                    }
+                }
+            }
+            point_row
+        })
+        .collect::<Vec<Vec<Point>>>();
+
+    let mut result = 0;
+    for (y, row) in map.iter().enumerate() {
+        for (x, point) in row.iter().enumerate() {
+        }
+    }
+    println!("{result}");
+}

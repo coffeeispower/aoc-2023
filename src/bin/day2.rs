@@ -100,7 +100,7 @@ impl FromStr for Game {
     type Err = ();
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut colon_split = s.split(": ");
-        
+
         #[cfg(not(feature = "part2"))]
         let id = colon_split
             .next()
